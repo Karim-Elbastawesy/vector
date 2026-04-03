@@ -3,11 +3,28 @@ import ProductItem from '@/app/_components/ProductItem/ProductItem'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft, Package } from 'lucide-react'
+import { notFound } from 'next/navigation'
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export const dynamic = 'force-dynamic'
+
+export default async function CategoryPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
-    const category = await getSingleCategory(id)
-    const products = await getProductsByCategory(id)
+
+    let category, products
+
+    try {
+        [category, products] = await Promise.all([
+            getSingleCategory(id),
+            getProductsByCategory(id)
+        ])
+    } catch (error) {
+        console.error("Failed to fetch category or products:", error)
+        notFound()
+    }
+
+    if (!category) {
+        notFound()
+    }
 
     return (
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -22,7 +39,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-12 bg-white border border-gray-100 rounded-3xl p-8 shadow-sm">
                 <div className="w-32 h-32 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 border border-gray-100 overflow-hidden">
                     <Image
-                        src={category.image}
+                        src={category.image || '/placeholder.jpg'}
                         alt={category.name}
                         width={128}
                         height={128}
@@ -30,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     />
                 </div>
                 <div>
-                    <p className="text-xs text-amber-500 font-semibold uppercase tracking-widest mb-1">Category</p>
+                    <p className="text-xs text-amber-500 font-semibold uppercase tracking-widest mb-1">CATEGORY</p>
                     <h1 className="text-3xl font-black text-gray-900 mb-2">{category.name}</h1>
                     <p className="text-gray-400 text-sm">{products.length} products available</p>
                 </div>
@@ -44,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                             Products in <span className="text-amber-500">{category.name}</span>
                         </h2>
                     </div>
-                    <div className="grid xl:grid-cols-5 md:grid-cols-4 grid-cols-2 gap-5">
+                    <div className="grid xl:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-5">
                         {products.map(prod => (
                             <ProductItem prod={prod} key={prod._id} />
                         ))}
