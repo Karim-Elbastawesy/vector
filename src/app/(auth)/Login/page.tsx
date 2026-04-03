@@ -1,7 +1,10 @@
 import React from 'react'
+import LoginForm from './loginForm/LoginForm'
 
 export default function page() {
   return (
-    <div>page</div>
+    <div>
+      <LoginForm/>
+    </div>
   )
 }
