@@ -4,7 +4,7 @@ import slider1 from '../assets/slider.jpg'
 import slider2 from '../assets/slider3.jpg'
 import slider3 from '../assets/deliverym.png'
 import MySlider from './_components/Slider/Slider'
-import Categories from './categories/Categories'
+import Categories from './categories/Category'
 import Image from 'next/image'
 import contactUs from "../../public/contactUs.jpg"
 import shopNow from "../../public/shopNow.jpg"
@@ -15,7 +15,7 @@ import InfoCards from './_components/infoCards/InfoCards'
 export default function Home() {
   return (
     <div>
-        
+
       <div className='block lg:flex pt-4 items-center gap-5'>
         <div className='w-full lg:w-3/4'>
           <MySlider
@@ -65,7 +65,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <InfoCards/>
+      <InfoCards />
       <Categories />
       <Products />
     </div>
