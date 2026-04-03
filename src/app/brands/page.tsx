@@ -22,7 +22,7 @@ export default async function Brands() {
 function BrandItem({ brand }: { brand: BrandsInterface }) {
   return (
     <Link
-      href={`brands/${brand._id}`}
+      href={`/brands/${brand._id}`}
       className="relative group block aspect-square rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
     >
       <div className="absolute p-8 flex items-center justify-center">
