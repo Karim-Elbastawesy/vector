@@ -1,15 +1,16 @@
-import { cookies } from "next/headers"
-import { getToken } from "next-auth/jwt"
+import { decode } from "next-auth/jwt";
+import { cookies } from "next/headers";
 
-export async function getTokenFn(): Promise<string | null> {
-    try {
-        const cookieStore = await cookies()
-        const token = await getToken({
-            req: { headers: { cookie: cookieStore.toString() } } as any,
-            secret: process.env.NEXTAUTH_SECRET!,
-        })
-        return (token?.userToken as string) ?? null
-    } catch {
-        return null
-    }
+export async function getAuthToken() {
+  const cookieToken = await cookies();
+  const authToken =
+    cookieToken.get("next-auth.session-token")?.value ||
+    cookieToken.get("__Secure-next-auth.session-token")?.value;
+
+  const decodedToken = await decode({
+    token: authToken,
+    secret: process.env.NEXTAUTH_SECRET!,
+  });
+
+  return decodedToken?.userToken as string | undefined;
 }
