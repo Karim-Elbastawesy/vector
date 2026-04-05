@@ -3,8 +3,8 @@ import type { NextRequest } from "next/server";
 
 export function proxy(request: NextRequest) {
   const token =
-    request.cookies.get("next-auth.session-token") ||
-    request.cookies.get("__Secure-next-auth.session-token");
+    request.cookies.get("next-auth.session-token")?.value ||
+    request.cookies.get("__Secure-next-auth.session-token")?.value;
 
   const protectedPaths = [
     "/cart",
@@ -16,7 +16,7 @@ export function proxy(request: NextRequest) {
   ];
 
   const isProtectedPath = protectedPaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path),
+    request.nextUrl.pathname.startsWith(path)
   );
 
   if (isProtectedPath && !token) {
@@ -34,5 +34,6 @@ export const config = {
     "/addresses/:path*",
     "/checkout/:path*",
     "/orders/:path*",
+    "/api/auth/:path*",
   ],
 };
