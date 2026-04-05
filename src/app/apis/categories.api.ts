@@ -12,20 +12,18 @@ export interface CategoriesRoot {
     data: CategoryInterface[]
 }
 
-// Fetch all categories - can be cached
 export async function getCategories(): Promise<CategoryInterface[]> {
     const res = await fetch(`https://ecommerce.routemisr.com/api/v1/categories`, {
-        next: { revalidate: 3600 }   // Cache for 1 hour
+        next: { revalidate: 3600 }  
     })
     if (!res.ok) throw new Error("Failed to fetch categories")
     const payload: CategoriesRoot = await res.json()
     return payload?.data || []
 }
 
-// Important: This must NOT be cached
 export async function getSingleCategory(id: string): Promise<CategoryInterface> {
     const res = await fetch(`https://ecommerce.routemisr.com/api/v1/categories/${id}`, {
-        cache: 'no-store',        // ← This is the key fix
+        cache: 'no-store',      
         next: { revalidate: 0 }
     })
     if (!res.ok) throw new Error("Failed to fetch category")
